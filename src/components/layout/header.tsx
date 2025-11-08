@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { NotificationDropdown } from "@/components/social/notification-dropdown"
 
 export async function Header() {
   const session = await auth()
@@ -45,7 +46,9 @@ export async function Header() {
 
         <div className="flex items-center gap-4">
           {session ? (
-            <DropdownMenu>
+            <>
+              <NotificationDropdown />
+              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar>
@@ -79,6 +82,7 @@ export async function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </>
           ) : (
             <div className="flex gap-2 md:gap-3">
               <Link href="/login" className="action-node text-sm md:text-base px-3 py-2 md:px-4 md:py-2">

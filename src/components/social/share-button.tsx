@@ -1,0 +1,118 @@
+"use client"
+
+import { Share2 } from "lucide-react"
+import { useState } from "react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+interface ShareButtonProps {
+  url: string
+  title: string
+  text?: string
+}
+
+export function ShareButton({ url, title, text }: ShareButtonProps) {
+  const [copied, setCopied] = useState(false)
+
+  const fullUrl = typeof window !== "undefined" ? `${window.location.origin}${url}` : url
+
+  const shareData = {
+    title,
+    text: text || title,
+    url: fullUrl,
+  }
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData)
+      } catch (error) {
+        console.error("Share failed:", error)
+      }
+    }
+  }
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(fullUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (error) {
+      console.error("Copy failed:", error)
+    }
+  }
+
+  const shareToTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      text || title
+    )}&url=${encodeURIComponent(fullUrl)}`
+    window.open(twitterUrl, "_blank", "noopener,noreferrer")
+  }
+
+  const shareToFacebook = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      fullUrl
+    )}`
+    window.open(facebookUrl, "_blank", "noopener,noreferrer")
+  }
+
+  const shareToLine = () => {
+    const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
+      fullUrl
+    )}`
+    window.open(lineUrl, "_blank", "noopener,noreferrer")
+  }
+
+  // ネイティブシェアが使える場合はそれを優先
+  const hasNativeShare =
+    typeof navigator !== "undefined" && navigator.share !== undefined
+
+  if (hasNativeShare) {
+    return (
+      <button
+        onClick={handleNativeShare}
+        className="flex items-center gap-2 text-gray-400 hover:text-golden transition-colors"
+        aria-label="シェア"
+      >
+        <Share2 size={20} />
+        <span className="text-sm font-medium">シェア</span>
+      </button>
+    )
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className="flex items-center gap-2 text-gray-400 hover:text-golden transition-colors"
+          aria-label="シェア"
+        >
+          <Share2 size={20} />
+          <span className="text-sm font-medium">シェア</span>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="bg-deep-blue border border-golden/30">
+        <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer">
+          <span className="mr-2">𝕏</span>
+          X (Twitter) でシェア
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer">
+          <span className="mr-2">📘</span>
+          Facebook でシェア
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={shareToLine} className="cursor-pointer">
+          <span className="mr-2">💬</span>
+          LINE でシェア
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer">
+          <span className="mr-2">🔗</span>
+          {copied ? "コピーしました！" : "リンクをコピー"}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}

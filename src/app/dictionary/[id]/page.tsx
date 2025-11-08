@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { EntryCard } from "@/components/social/entry-card"
+import { auth } from "@/lib/auth"
 
 export default async function TermDetailPage({
   params,
@@ -11,10 +13,30 @@ export default async function TermDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const session = await auth()
 
   const term = await prisma.term.findUnique({
     where: { id },
     include: {
+      entries: {
+        orderBy: [
+          { isCrown: "desc" },
+          { likeCount: "desc" },
+          { createdAt: "desc" },
+        ],
+        take: 20,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              level: true,
+              rank: true,
+            },
+          },
+        },
+      },
       attempts: {
         where: { success: true },
         orderBy: { confidence: "desc" },
@@ -34,6 +56,21 @@ export default async function TermDetailPage({
 
   if (!term) {
     redirect("/dictionary")
+  }
+
+  // デバッグ情報
+  console.log("📚 辞書ページ:", {
+    termId: term.id,
+    termWord: term.word,
+    entriesCount: term.entries.length,
+    attemptsCount: term.attempts.length,
+  })
+  if (term.entries.length > 0) {
+    console.log("✅ Entries:", term.entries.map(e => ({
+      id: e.id.slice(0, 8),
+      userId: e.userId.slice(0, 8),
+      confidence: e.confidence,
+    })))
   }
 
   const successRate = term.totalAttempts > 0
@@ -102,45 +139,31 @@ export default async function TermDetailPage({
           </div>
         </Card>
 
-        {term.attempts.length > 0 && (
+        {/* コミュニティの説明 */}
+        {term.entries.length > 0 && (
           <div>
-            <h2 className="text-2xl font-semibold mb-4">成功した説明</h2>
+            <h2 className="text-2xl font-bold heading text-golden mb-4">
+              コミュニティの説明
+            </h2>
             <div className="space-y-4">
-              {term.attempts.map((attempt) => (
-                <Card key={attempt.id} className="p-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">{attempt.user.name}</span>
-                        <Badge variant="secondary">Lv.{attempt.user.level}</Badge>
-                        <Badge variant="outline">{attempt.user.rank}</Badge>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge>{attempt.difficulty}</Badge>
-                        <span className="text-sm text-muted-foreground">
-                          確信度: {attempt.confidence}%
-                        </span>
-                      </div>
-                    </div>
-                    <p className="whitespace-pre-wrap">{attempt.explanation}</p>
-                    {attempt.aiComment && (
-                      <p className="text-sm text-muted-foreground italic border-l-2 pl-3">
-                        AI: {attempt.aiComment}
-                      </p>
-                    )}
-                  </div>
-                </Card>
+              {term.entries.map((entry) => (
+                <EntryCard
+                  key={entry.id}
+                  entry={entry}
+                  termId={term.id}
+                  termWord={term.word}
+                />
               ))}
             </div>
           </div>
         )}
 
-        {term.attempts.length === 0 && (
-          <Card className="p-8 text-center">
-            <p className="text-lg text-muted-foreground">
-              まだ成功した説明がありません。最初に成功する人になりませんか？
+        {term.entries.length === 0 && (
+          <Card className="knowledge-cluster p-8 text-center">
+            <p className="text-lg text-gray-300">
+              まだ投稿された説明がありません。最初に説明を投稿する人になりませんか？
             </p>
-            <Button asChild className="mt-4">
+            <Button asChild className="action-node mt-4">
               <Link href={`/play/${term.id}`}>挑戦する</Link>
             </Button>
           </Card>
