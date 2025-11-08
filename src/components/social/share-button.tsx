@@ -1,6 +1,6 @@
 "use client"
 
-import { Share2 } from "lucide-react"
+import { Share2, Facebook, MessageCircle, Link2, Check } from "lucide-react"
 import { useState } from "react"
 import {
   DropdownMenu,
@@ -96,20 +96,20 @@ export function ShareButton({ url, title, text }: ShareButtonProps) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-deep-blue border border-golden/30">
-        <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer">
-          <span className="mr-2">𝕏</span>
+        <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer flex items-center gap-2">
+          <span className="text-lg font-bold">𝕏</span>
           X (Twitter) でシェア
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer">
-          <span className="mr-2">📘</span>
+        <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer flex items-center gap-2">
+          <Facebook size={16} />
           Facebook でシェア
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={shareToLine} className="cursor-pointer">
-          <span className="mr-2">💬</span>
+        <DropdownMenuItem onClick={shareToLine} className="cursor-pointer flex items-center gap-2">
+          <MessageCircle size={16} />
           LINE でシェア
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer">
-          <span className="mr-2">🔗</span>
+        <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer flex items-center gap-2">
+          {copied ? <Check size={16} className="text-success" /> : <Link2 size={16} />}
           {copied ? "コピーしました！" : "リンクをコピー"}
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -147,7 +147,6 @@ export async function POST(request: NextRequest) {
           })
           console.log("✨ 新規Entry作成成功:", newEntry.id)
         }
-        });
       }
     }
 

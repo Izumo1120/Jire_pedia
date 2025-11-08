@@ -442,3 +442,214 @@ h3 {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* ===================================================================
+   Generative Nexus - 分野別テーマカラーシステム
+   =================================================================== */
+
+/* 理科 (Science) - 青緑系 Cyan */
+.category-science {
+  --category-color: #00BCD4;
+  --category-color-light: #4DD0E1;
+  --category-color-dark: #0097A7;
+  --category-glow: rgba(0, 188, 212, 0.6);
+}
+
+.category-science .knowledge-cluster {
+  border-color: rgba(0, 188, 212, 0.4);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 188, 212, 0.1) inset,
+    0 0 40px rgba(0, 188, 212, 0.15);
+}
+
+.category-science .knowledge-cluster:hover {
+  border-color: rgba(0, 188, 212, 0.6);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 188, 212, 0.2) inset,
+    0 0 60px rgba(0, 188, 212, 0.3);
+}
+
+.category-science .action-node {
+  background: linear-gradient(135deg, rgba(0, 188, 212, 0.15) 0%, rgba(0, 151, 167, 0.25) 100%);
+  border-color: rgba(0, 188, 212, 0.5);
+}
+
+.category-science .action-node:hover {
+  box-shadow:
+    0 8px 24px rgba(0, 188, 212, 0.3),
+    0 0 40px rgba(0, 188, 212, 0.4);
+}
+
+.category-science .knowledge-crystal {
+  background: rgba(0, 188, 212, 0.15);
+  border-color: rgba(0, 188, 212, 0.4);
+  color: #4DD0E1;
+}
+
+/* 社会 (Social Studies) - 橙系 Orange */
+.category-social {
+  --category-color: #FF9800;
+  --category-color-light: #FFB74D;
+  --category-color-dark: #F57C00;
+  --category-glow: rgba(255, 152, 0, 0.6);
+}
+
+.category-social .knowledge-cluster {
+  border-color: rgba(255, 152, 0, 0.4);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 152, 0, 0.1) inset,
+    0 0 40px rgba(255, 152, 0, 0.15);
+}
+
+.category-social .knowledge-cluster:hover {
+  border-color: rgba(255, 152, 0, 0.6);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 152, 0, 0.2) inset,
+    0 0 60px rgba(255, 152, 0, 0.3);
+}
+
+.category-social .action-node {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.15) 0%, rgba(245, 124, 0, 0.25) 100%);
+  border-color: rgba(255, 152, 0, 0.5);
+}
+
+.category-social .action-node:hover {
+  box-shadow:
+    0 8px 24px rgba(255, 152, 0, 0.3),
+    0 0 40px rgba(255, 152, 0, 0.4);
+}
+
+.category-social .knowledge-crystal {
+  background: rgba(255, 152, 0, 0.15);
+  border-color: rgba(255, 152, 0, 0.4);
+  color: #FFB74D;
+}
+
+/* 数学 (Math) - 紫系 Purple */
+.category-math {
+  --category-color: #9C27B0;
+  --category-color-light: #BA68C8;
+  --category-color-dark: #7B1FA2;
+  --category-glow: rgba(156, 39, 176, 0.6);
+}
+
+.category-math .knowledge-cluster {
+  border-color: rgba(156, 39, 176, 0.4);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(156, 39, 176, 0.1) inset,
+    0 0 40px rgba(156, 39, 176, 0.15);
+}
+
+.category-math .knowledge-cluster:hover {
+  border-color: rgba(156, 39, 176, 0.6);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(156, 39, 176, 0.2) inset,
+    0 0 60px rgba(156, 39, 176, 0.3);
+}
+
+.category-math .action-node {
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.15) 0%, rgba(123, 31, 162, 0.25) 100%);
+  border-color: rgba(156, 39, 176, 0.5);
+}
+
+.category-math .action-node:hover {
+  box-shadow:
+    0 8px 24px rgba(156, 39, 176, 0.3),
+    0 0 40px rgba(156, 39, 176, 0.4);
+}
+
+.category-math .knowledge-crystal {
+  background: rgba(156, 39, 176, 0.15);
+  border-color: rgba(156, 39, 176, 0.4);
+  color: #BA68C8;
+}
+
+/* カテゴリバッジのスタイル */
+.category-badge-science {
+  background: rgba(0, 188, 212, 0.2);
+  color: #4DD0E1;
+  border: 1px solid rgba(0, 188, 212, 0.4);
+  text-shadow: 0 0 10px rgba(0, 188, 212, 0.8);
+}
+
+.category-badge-social {
+  background: rgba(255, 152, 0, 0.2);
+  color: #FFB74D;
+  border: 1px solid rgba(255, 152, 0, 0.4);
+  text-shadow: 0 0 10px rgba(255, 152, 0, 0.8);
+}
+
+.category-badge-math {
+  background: rgba(156, 39, 176, 0.2);
+  color: #BA68C8;
+  border: 1px solid rgba(156, 39, 176, 0.4);
+  text-shadow: 0 0 10px rgba(156, 39, 176, 0.8);
+}
+
+/* ===================================================================
+   Enhanced Background Animation - Premium Feel
+   =================================================================== */
+
+/* 背景グラデーションの改善 */
+.nexus-canvas {
+  background: linear-gradient(135deg,
+    #0A2540 0%,
+    #0d2d4d 25%,
+    #1a3a5a 50%,
+    #0d2d4d 75%,
+    #0A2540 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 20s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* パーティクルに深度感を追加 */
+@keyframes particle-float-depth {
+  0%, 100% {
+    transform: translateY(0) translateZ(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) translateZ(50px);
+    opacity: 0.7;
+  }
+}
+
+/* 光のパルスエフェクト */
+@keyframes light-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(12px);
+  }
+}
+
+/* グロー効果の強化 */
+.glow-intense {
+  filter: drop-shadow(0 0 20px currentColor)
+          drop-shadow(0 0 40px currentColor);
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px currentColor);
+  }
+  50% {
+    filter: drop-shadow(0 0 40px currentColor)
+            drop-shadow(0 0 60px currentColor);
+  }
+}
