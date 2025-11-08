@@ -51,28 +51,28 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="knowledge-cluster space-y-4 md:space-y-5 relative z-10">
       <div className="space-y-2">
-        <Label htmlFor="email">メールアドレス</Label>
-        <Input id="email" type="email" {...register("email")} disabled={isLoading} />
-        {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
+        <Label htmlFor="email" className="text-sm md:text-base">メールアドレス</Label>
+        <Input id="email" type="email" {...register("email")} disabled={isLoading} className="thought-workspace" />
+        {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password">パスワード</Label>
-        <Input id="password" type="password" {...register("password")} disabled={isLoading} />
-        {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
+        <Label htmlFor="password" className="text-sm md:text-base">パスワード</Label>
+        <Input id="password" type="password" {...register("password")} disabled={isLoading} className="thought-workspace" />
+        {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
       </div>
 
       {error && (
-        <div className="rounded-md bg-red-50 p-3 border border-red-200">
-          <p className="text-sm text-red-500">{error}</p>
+        <div className="unstable-zone p-3">
+          <p className="text-sm md:text-base">{error}</p>
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <button type="submit" className="action-node w-full text-base md:text-lg py-3 font-bold disabled:opacity-50 disabled:cursor-not-allowed relative z-20" disabled={isLoading}>
         {isLoading ? "ログイン中..." : "ログイン"}
-      </Button>
+      </button>
     </form>
   )
 }

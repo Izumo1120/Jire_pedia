@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { signOut, useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { NotificationDropdown } from "@/components/social/notification-dropdown"
-import { Gamepad2 } from "lucide-react"
 
 export function HeaderClient() {
   const { data: session } = useSession()
@@ -24,10 +24,18 @@ export function HeaderClient() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md">
-      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+      <div className="flex h-16 items-center justify-between px-4 md:px-6 mx-auto" style={{ maxWidth: '100%' }}>
         <div className="flex gap-4 md:gap-8 items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <Gamepad2 className="w-6 h-6 md:w-7 md:h-7 text-primary" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.5))' }} />
+          <Link href="/" className="flex items-center gap-2 md:gap-3">
+            <div className="relative w-8 h-8 md:w-10 md:h-10" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.5))' }}>
+              <Image
+                src="/logo.png"
+                alt="Jire-pedia Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             <span className="text-xl md:text-2xl font-bold heading" style={{ textShadow: '0 2px 8px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.15)' }}>
               Jire-pedia
             </span>
