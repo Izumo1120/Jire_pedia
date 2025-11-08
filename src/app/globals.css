@@ -1,0 +1,444 @@
+@import "tailwindcss";
+
+@theme {
+  /* Generative Nexus - 光の定義 (Emanations) */
+  --color-background: #0A2540;  /* Deep Nexus Blue - 深淵と思考の海 */
+  --color-foreground: #F5F5F5;  /* Clarity White - 情報そのものの光 (高コントラスト化) */
+  --color-primary: #FFD700;     /* Bright Nexus Yellow - ひらめきと連鎖の光 */
+  --color-primary-foreground: #0A2540;
+  --color-secondary: rgba(255, 215, 0, 0.2);  /* 黄金の霧 (視認性向上) */
+  --color-secondary-foreground: #FFFFFF;
+  --color-muted: rgba(255, 255, 255, 0.15);  /* 視認性向上 */
+  --color-muted-foreground: rgba(255, 255, 255, 0.75);  /* コントラスト改善 */
+  --color-accent: #FFD700;      /* Bright Nexus Yellow */
+  --color-accent-foreground: #0A2540;
+  --color-destructive: #FF5722; /* Warning Ember - 不安定と制約の光 */
+  --color-destructive-foreground: #FFFFFF;
+  --color-success: #28A745;     /* Success Viridian - 承認と生成の光 */
+  --color-border: rgba(255, 215, 0, 0.3);  /* ボーダー視認性向上 */
+  --color-input: rgba(255, 255, 255, 0.08);  /* 入力フィールド視認性向上 */
+  --color-ring: #FFD700;
+  --radius: 1rem;
+
+  /* Generative Nexus - レスポンシブ定義 */
+  --spacing-mobile: 1rem;
+  --spacing-tablet: 1.5rem;
+  --spacing-desktop: 2rem;
+  --font-size-base-mobile: 14px;
+  --font-size-base-tablet: 15px;
+  --font-size-base-desktop: 16px;
+}
+
+/* Generative Nexus - タイポグラフィ */
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #0A2540;
+  color: #F5F5F5;
+  overflow-x: hidden;
+  font-size: var(--font-size-base-mobile);
+  line-height: 1.7;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: var(--font-size-base-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    font-size: var(--font-size-base-desktop);
+  }
+}
+
+h1, h2, h3, .heading {
+  font-family: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.15);
+}
+
+h1 {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  line-height: 1.4;
+}
+
+/* ネクサス・キャンバス - 動的パーティクル・フィールド */
+.nexus-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, #0A2540 0%, #1a3a5a 100%);
+}
+
+/* 知の集合体 (Knowledge Cluster) */
+.knowledge-cluster {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 1rem;
+  padding: var(--spacing-mobile);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 2px 4px rgba(255, 215, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .knowledge-cluster {
+    padding: var(--spacing-tablet);
+    border-radius: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .knowledge-cluster {
+    padding: var(--spacing-desktop);
+    border-radius: 1.5rem;
+  }
+}
+
+.knowledge-cluster::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 1.5rem;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.knowledge-cluster:hover::before {
+  opacity: 1;
+  animation: cluster-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cluster-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* アクション・ノード (Action Node) */
+.action-node {
+  position: relative;
+  color: #FFFFFF;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .action-node {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+  }
+}
+
+.action-node:hover {
+  color: #FFD700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.1));
+  border-color: rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(255, 215, 0, 0.2);
+  animation: node-pulse 1s ease-in-out infinite;
+  transform: translateY(-2px);
+}
+
+@keyframes node-pulse {
+  0%, 100% { transform: translateY(-2px) scale(1); }
+  50% { transform: translateY(-2px) scale(1.02); }
+}
+
+.action-node:active {
+  animation: node-burst 0.3s ease-out;
+  transform: translateY(0);
+}
+
+@keyframes node-burst {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.5); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* 思考のワークスペース (Thought Workspace) */
+.thought-workspace {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  color: #F5F5F5;
+  transition: all 0.4s ease;
+  font-size: 1rem;
+  line-height: 1.7;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.thought-workspace::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.thought-workspace:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow:
+    0 0 30px rgba(255, 215, 0, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  outline: none;
+  color: #FFFFFF;
+}
+
+@media (min-width: 768px) {
+  .thought-workspace {
+    padding: 1.25rem;
+    font-size: 1.05rem;
+  }
+}
+
+/* 不安定領域 (Unstable Zone) */
+.unstable-zone {
+  color: #FF5722;
+  animation: unstable-vibrate 0.3s ease-in-out infinite;
+}
+
+@keyframes unstable-vibrate {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* 光の連鎖 (Light Chain) */
+.light-chain-active {
+  position: relative;
+  color: #FFD700;
+  font-weight: 700;
+}
+
+.light-chain-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFD700, transparent);
+  animation: light-flow 2s linear infinite;
+}
+
+@keyframes light-flow {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 知の結晶 (Knowledge Crystal) */
+.knowledge-crystal {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.1));
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 0.5rem;
+  box-shadow:
+    0 4px 15px rgba(255, 215, 0, 0.3),
+    0 0 0 1px rgba(255, 215, 0, 0.1) inset;
+  backdrop-filter: blur(8px);
+  animation: crystal-glow 3s ease-in-out infinite;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .knowledge-crystal {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+}
+
+@keyframes crystal-glow {
+  0%, 100% {
+    box-shadow:
+      0 4px 15px rgba(255, 215, 0, 0.3),
+      0 0 0 1px rgba(255, 215, 0, 0.1) inset;
+  }
+  50% {
+    box-shadow:
+      0 4px 25px rgba(255, 215, 0, 0.6),
+      0 0 0 1px rgba(255, 215, 0, 0.2) inset;
+  }
+}
+
+.success-crystal {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.25), rgba(40, 167, 69, 0.1));
+  border-color: rgba(40, 167, 69, 0.5);
+  box-shadow:
+    0 4px 15px rgba(40, 167, 69, 0.3),
+    0 0 0 1px rgba(40, 167, 69, 0.1) inset;
+  animation: success-crystal-glow 3s ease-in-out infinite;
+}
+
+@keyframes success-crystal-glow {
+  0%, 100% {
+    box-shadow:
+      0 4px 15px rgba(40, 167, 69, 0.3),
+      0 0 0 1px rgba(40, 167, 69, 0.1) inset;
+  }
+  50% {
+    box-shadow:
+      0 4px 25px rgba(40, 167, 69, 0.6),
+      0 0 0 1px rgba(40, 167, 69, 0.2) inset;
+  }
+}
+
+/* パーティクル効果 */
+@keyframes particle-float {
+  0%, 100% { transform: translate(0, 0); opacity: 0.3; }
+  50% { transform: translate(10px, -10px); opacity: 0.6; }
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 215, 0, 0.5);
+  border-radius: 50%;
+  animation: particle-float 3s ease-in-out infinite;
+}
+
+/* Generative Nexus - レスポンシブコンテナ */
+.nexus-container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .nexus-container {
+    max-width: 640px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .nexus-container {
+    max-width: 768px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nexus-container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nexus-container {
+    max-width: 1280px;
+  }
+}
+
+/* Generative Nexus - スペーシングシステム */
+.nexus-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .nexus-section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nexus-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* Generative Nexus - グリッドシステム */
+.nexus-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .nexus-grid {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .nexus-grid {
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nexus-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Generative Nexus - ローディングアニメーション */
+.nexus-loading {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.nexus-loading::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #FFD700;
+  border-color: #FFD700 transparent #FFD700 transparent;
+  animation: nexus-loading-spin 1.2s linear infinite;
+}
+
+@keyframes nexus-loading-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
