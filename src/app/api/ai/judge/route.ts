@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // ユーザーのXPとレベルを更新
+    // ユーザーのXPとレベルを更新 & Entryを作成
     if (result.success) {
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
@@ -100,6 +100,53 @@ export async function POST(request: NextRequest) {
             level: levelUpCheck.newLevel,
             rank: getRankFromLevel(levelUpCheck.newLevel),
           },
+        })
+
+        // 成功した説明をEntryとして辞書に投稿
+        console.log("📝 Entry作成処理開始:", {
+          userId: session.user.id,
+          termId: term.id,
+          confidence: result.confidence,
+        })
+
+        // 既存のEntryがあるかチェック
+        const existingEntry = await prisma.entry.findFirst({
+          where: {
+            userId: session.user.id,
+            termId: term.id,
+          },
+        })
+
+        if (existingEntry) {
+          console.log("🔄 既存Entry発見:", existingEntry.id, "confidence:", existingEntry.confidence)
+          // 既存のEntryがある場合、より高いconfidenceの場合のみ更新
+          if (result.confidence > existingEntry.confidence) {
+            const updated = await prisma.entry.update({
+              where: { id: existingEntry.id },
+              data: {
+                explanation,
+                difficulty,
+                confidence: result.confidence,
+                version: { increment: 1 },
+              },
+            })
+            console.log("✅ Entry更新成功:", updated.id)
+          } else {
+            console.log("⏭️  更新スキップ: 既存のconfidenceの方が高い")
+          }
+        } else {
+          // 新規Entry作成
+          const newEntry = await prisma.entry.create({
+            data: {
+              userId: session.user.id,
+              termId: term.id,
+              explanation,
+              difficulty,
+              confidence: result.confidence,
+            },
+          })
+          console.log("✨ 新規Entry作成成功:", newEntry.id)
+        }
         });
       }
     }
