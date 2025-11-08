@@ -30,8 +30,8 @@ export async function judgeWithGemini(
   explanation: string,
   correctAnswer: string
 ): Promise<JudgementResult> {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
-  // const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+  // Using Gemini 2.5 Flash - best model for price-performance
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
   const result = await model.generateContent(createJudgementPrompt(explanation))
   const text = result.response.text()
 
