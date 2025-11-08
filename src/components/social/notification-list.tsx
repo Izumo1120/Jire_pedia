@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Bell, Check, Trash2 } from "lucide-react"
+import { Bell, Check, Trash2, Heart, MessageSquare, Crown, TrendingUp, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Notification {
@@ -69,19 +69,22 @@ export function NotificationList({
   }
 
   const getNotificationIcon = (type: string) => {
+    const iconClass = "w-6 h-6"
+    const iconStyle = { filter: 'drop-shadow(0 0 8px currentColor)' }
+
     switch (type) {
       case "like":
-        return "❤️"
+        return <Heart className={`${iconClass} text-red-500`} style={iconStyle} />
       case "comment":
-        return "💬"
+        return <MessageSquare className={`${iconClass} text-blue-400`} style={iconStyle} />
       case "crown":
-        return "👑"
+        return <Crown className={`${iconClass} text-yellow-400`} style={iconStyle} />
       case "level_up":
-        return "⬆️"
+        return <TrendingUp className={`${iconClass} text-green-400`} style={iconStyle} />
       case "system":
-        return "📢"
+        return <Megaphone className={`${iconClass} text-primary`} style={iconStyle} />
       default:
-        return "🔔"
+        return <Bell className={`${iconClass} text-gray-400`} style={iconStyle} />
     }
   }
 
@@ -143,7 +146,7 @@ export function NotificationList({
               }`}
             >
               <div className="flex items-start gap-4">
-                <div className="text-2xl flex-shrink-0">
+                <div className="flex-shrink-0">
                   {getNotificationIcon(notification.type)}
                 </div>
                 <div className="flex-1 min-w-0">

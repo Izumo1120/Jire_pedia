@@ -21,21 +21,21 @@ export default async function SelectTermPage() {
   })
 
   if (!randomTerm) {
-    return <div className="container py-10">用語が見つかりませんでした</div>
+    return <div className="nexus-container nexus-section">用語が見つかりませんでした</div>
   }
 
   return (
-    <div className="container py-10">
-      <div className="mx-auto max-w-2xl space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">用語を説明しよう</h1>
-          <p className="text-muted-foreground">
+    <div className="nexus-container nexus-section">
+      <div className="mx-auto max-w-2xl space-y-6 md:space-y-8">
+        <div className="text-center space-y-3 md:space-y-4">
+          <h1 className="heading text-3xl md:text-4xl lg:text-5xl font-bold">用語を説明しよう</h1>
+          <p className="text-base md:text-lg text-muted-foreground">
             AIに推測させる用語が選ばれました
           </p>
         </div>
 
-        <Card className="p-8">
-          <div className="space-y-6">
+        <Card className="knowledge-cluster p-6 md:p-8">
+          <div className="space-y-4 md:space-y-6">
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-2">カテゴリー</p>
               <p className="text-lg font-semibold">{randomTerm.category}</p>

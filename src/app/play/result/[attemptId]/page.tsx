@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { PartyPopper, X } from "lucide-react"
 
 export default async function ResultPage({
   params,
@@ -32,22 +33,26 @@ export default async function ResultPage({
   }
 
   return (
-    <div className="container py-10">
-      <div className="mx-auto max-w-3xl space-y-6">
+    <div className="nexus-container nexus-section">
+      <div className="mx-auto max-w-3xl space-y-6 md:space-y-8">
         <div className="text-center">
           {attempt.success ? (
             <>
-              <div className="text-6xl mb-4">🎉</div>
-              <h1 className="text-4xl font-bold text-green-600">成功!</h1>
-              <p className="text-lg text-muted-foreground mt-2">
+              <div className="mb-4 md:mb-6 flex justify-center">
+                <PartyPopper className="w-16 h-16 md:w-20 md:h-20 text-success" style={{ filter: 'drop-shadow(0 0 20px rgba(40, 167, 69, 0.8))' }} />
+              </div>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-success mb-2 md:mb-3">成功!</h1>
+              <p className="text-base md:text-lg text-muted-foreground">
                 AIはあなたの説明を理解しました
               </p>
             </>
           ) : (
             <>
-              <div className="text-6xl mb-4">😢</div>
-              <h1 className="text-4xl font-bold text-red-600">失敗...</h1>
-              <p className="text-lg text-muted-foreground mt-2">
+              <div className="mb-4 md:mb-6 flex justify-center">
+                <X className="w-16 h-16 md:w-20 md:h-20 text-destructive" style={{ filter: 'drop-shadow(0 0 20px rgba(255, 87, 34, 0.8))' }} />
+              </div>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-destructive mb-2 md:mb-3">失敗...</h1>
+              <p className="text-base md:text-lg text-muted-foreground">
                 AIは別の答えを推測しました
               </p>
             </>

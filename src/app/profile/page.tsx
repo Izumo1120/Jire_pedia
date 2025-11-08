@@ -46,15 +46,15 @@ export default async function ProfilePage() {
   const xpProgress = (user.xp / requiredXP) * 100
 
   return (
-    <div className="container py-10">
-      <div className="mx-auto max-w-4xl space-y-6">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-2">{user.name}</h1>
-          <p className="text-lg text-muted-foreground">{user.email}</p>
+    <div className="nexus-container nexus-section">
+      <div className="mx-auto max-w-4xl space-y-6 md:space-y-8">
+        <div className="text-center space-y-2 md:space-y-3">
+          <h1 className="heading text-3xl md:text-4xl lg:text-5xl font-bold">{user.name}</h1>
+          <p className="text-base md:text-lg text-muted-foreground">{user.email}</p>
         </div>
 
-        <Card className="p-6">
-          <div className="space-y-4">
+        <Card className="knowledge-cluster p-4 md:p-6">
+          <div className="space-y-4 md:space-y-5">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">レベル</p>
@@ -78,23 +78,23 @@ export default async function ProfilePage() {
         </Card>
 
         <div className="grid gap-4 md:grid-cols-3">
-          <Card className="p-6">
+          <Card className="knowledge-cluster p-4 md:p-6">
             <div className="text-center">
               <p className="text-3xl font-bold">{totalAttempts}</p>
               <p className="text-sm text-muted-foreground">挑戦回数</p>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="knowledge-cluster p-4 md:p-6">
             <div className="text-center">
               <p className="text-3xl font-bold">{successfulAttempts}</p>
               <p className="text-sm text-muted-foreground">成功回数</p>
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="knowledge-cluster p-4 md:p-6">
             <div className="text-center">
-              <p className={`text-3xl font-bold ${successRate > 50 ? "text-green-600" : "text-orange-600"}`}>
+              <p className={`text-3xl font-bold ${successRate > 50 ? "text-success" : "text-destructive"}`}>
                 {successRate}%
               </p>
               <p className="text-sm text-muted-foreground">成功率</p>
@@ -104,10 +104,10 @@ export default async function ProfilePage() {
 
         {user.attempts.length > 0 && (
           <div>
-            <h2 className="text-2xl font-semibold mb-4">最近の挑戦</h2>
-            <div className="space-y-3">
+            <h2 className="heading text-2xl md:text-3xl font-bold mb-4 md:mb-6">最近の挑戦</h2>
+            <div className="space-y-3 md:space-y-4">
               {user.attempts.map((attempt) => (
-                <Card key={attempt.id} className="p-4">
+                <Card key={attempt.id} className="knowledge-cluster p-4 md:p-5">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">

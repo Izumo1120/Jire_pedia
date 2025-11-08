@@ -25,7 +25,7 @@ export default async function GamePlayPage({
   }
 
   return (
-    <div className="container py-10">
+    <div className="nexus-container nexus-section">
       <div className="mx-auto max-w-3xl">
         <GamePlayForm term={term} userId={session.user.id} />
       </div>

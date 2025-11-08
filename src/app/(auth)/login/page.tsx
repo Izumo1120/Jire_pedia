@@ -3,11 +3,11 @@ import Link from "next/link"
 
 export default function LoginPage() {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <div className="flex flex-col space-y-2 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">ログイン</h1>
-          <p className="text-sm text-muted-foreground">
+    <div className="flex min-h-[calc(100vh-4rem)] w-full flex-col items-center justify-center px-4">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[380px] md:w-[420px]">
+        <div className="flex flex-col space-y-3 text-center">
+          <h1 className="heading text-3xl md:text-4xl font-bold text-golden">ログイン</h1>
+          <p className="text-sm md:text-base text-muted-foreground">
             メールアドレスとパスワードを入力してください
           </p>
         </div>

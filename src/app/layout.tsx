@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { Providers } from "@/components/providers"
-import { Header } from "@/components/layout/header"
+import { HeaderClient } from "@/components/layout/header-client"
+import { Sidebar } from "@/components/layout/sidebar"
 import { NexusCanvas } from "@/components/nexus/nexus-canvas"
 
 export const metadata: Metadata = {
@@ -25,8 +26,11 @@ export default function RootLayout({
         <Providers>
           <NexusCanvas />
           <div className="relative flex min-h-screen flex-col" style={{ zIndex: 1 }}>
-            <Header />
-            <main className="flex-1">{children}</main>
+            <HeaderClient />
+            <div className="flex flex-1">
+              <Sidebar />
+              <main className="flex-1">{children}</main>
+            </div>
           </div>
         </Providers>
       </body>

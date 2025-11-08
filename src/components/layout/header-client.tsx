@@ -1,5 +1,7 @@
+"use client"
+
 import Link from "next/link"
-import { auth } from "@/lib/auth"
+import { signOut, useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,8 +15,12 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { NotificationDropdown } from "@/components/social/notification-dropdown"
 import { Gamepad2 } from "lucide-react"
 
-export async function Header() {
-  const session = await auth()
+export function HeaderClient() {
+  const { data: session } = useSession()
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" })
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md">
@@ -51,39 +57,35 @@ export async function Header() {
             <>
               <NotificationDropdown />
               <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                  <Avatar>
-                    <AvatarFallback>
-                      {session.user?.name?.charAt(0).toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>
-                  {session.user?.name || "ユーザー"}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/profile">プロフィール</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/play/select">プレイ</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dictionary">辞書</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <form action="/api/auth/signout" method="POST">
-                    <button type="submit" className="w-full text-left">
-                      ログアウト
-                    </button>
-                  </form>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar>
+                      <AvatarFallback>
+                        {session.user?.name?.charAt(0).toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>
+                    {session.user?.name || "ユーザー"}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">プロフィール</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/play/select">プレイ</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dictionary">辞書</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    ログアウト
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <div className="flex gap-2 md:gap-3">
