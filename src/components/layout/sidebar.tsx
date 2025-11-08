@@ -49,15 +49,20 @@ export function Sidebar() {
         className={`
           hidden md:block
           fixed left-0 top-16 h-[calc(100vh-4rem)]
-          bg-deep-blue/80 backdrop-blur-md border-r border-golden/30
-          transition-all duration-300 ease-in-out
           ${isExpanded ? "w-64" : "w-16"}
           z-40
         `}
+        style={{
+          background: 'linear-gradient(180deg, rgba(10, 37, 64, 0.95) 0%, rgba(10, 37, 64, 0.85) 100%)',
+          backdropFilter: 'blur(12px)',
+          borderRight: '1px solid rgba(255, 215, 0, 0.15)',
+          boxShadow: isExpanded ? '4px 0 20px rgba(0, 0, 0, 0.3)' : 'none',
+          transition: 'width 400ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
         onMouseEnter={() => setIsExpanded(true)}
         onMouseLeave={() => setIsExpanded(false)}
       >
-        <nav className="flex flex-col gap-2 p-2">
+        <nav className="flex flex-col gap-2 p-3">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
@@ -67,33 +72,43 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={`
-                  flex items-center gap-4 rounded-lg
-                  transition-all duration-300 ease-in-out
-                  ${isExpanded ? "px-4 py-3" : "px-3 py-3 justify-center"}
-                  ${isActive && isExpanded
-                    ? "bg-golden/20 text-golden border border-golden/50 shadow-[0_0_15px_rgba(255,215,0,0.3)]"
-                    : isActive
-                    ? "bg-golden/20 text-golden"
-                    : "text-gray-300 hover:bg-golden/10 hover:text-golden"
+                  flex items-center rounded-lg
+                  ${isExpanded ? "px-4 py-3 gap-4" : "px-3 py-3 justify-center"}
+                  ${isActive
+                    ? "bg-primary/20 text-primary"
+                    : "text-gray-300 hover:bg-primary/10 hover:text-primary"
                   }
-                  ${isExpanded && !isActive ? "hover:border-golden/30 border border-transparent" : ""}
                 `}
                 style={{
-                  filter: isActive ? 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.4))' : undefined
+                  transition: 'all 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  ...(isActive ? {
+                    boxShadow: '0 0 20px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.1)',
+                    background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%)',
+                  } : {})
                 }}
               >
-                <Icon
-                  className={`w-6 h-6 flex-shrink-0 ${isActive ? 'text-golden' : ''}`}
-                  style={{
-                    filter: isActive ? 'drop-shadow(0 0 6px rgba(255, 215, 0, 0.6))' : undefined
-                  }}
-                />
+                <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
+                  <Icon
+                    className={`w-6 h-6`}
+                    style={{
+                      transition: 'filter 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+                      ...(isActive ? {
+                        filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.6))'
+                      } : {})
+                    }}
+                  />
+                </div>
                 <span
                   className={`
-                    text-sm font-medium whitespace-nowrap
-                    transition-all duration-300 ease-in-out
-                    ${isExpanded ? "opacity-100 max-w-[200px]" : "opacity-0 max-w-0 overflow-hidden"}
+                    text-sm font-medium whitespace-nowrap overflow-hidden
+                    ${isExpanded ? "opacity-100 max-w-[200px]" : "opacity-0 max-w-0"}
                   `}
+                  style={{
+                    transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), max-width 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+                    ...(isActive ? {
+                      textShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
+                    } : {})
+                  }}
                 >
                   {item.label}
                 </span>
@@ -107,15 +122,22 @@ export function Sidebar() {
           className={`
             absolute -right-3 top-1/2 -translate-y-1/2
             w-6 h-12 flex items-center justify-center
-            bg-deep-blue border border-golden/30 rounded-r-lg
-            transition-all duration-300
+            rounded-r-lg
             ${isExpanded ? "opacity-100" : "opacity-0"}
           `}
+          style={{
+            background: 'rgba(10, 37, 64, 0.95)',
+            borderTop: '1px solid rgba(255, 215, 0, 0.2)',
+            borderRight: '1px solid rgba(255, 215, 0, 0.2)',
+            borderBottom: '1px solid rgba(255, 215, 0, 0.2)',
+            boxShadow: '2px 0 10px rgba(0, 0, 0, 0.2)',
+            transition: 'opacity 400ms cubic-bezier(0.4, 0, 0.2, 1)'
+          }}
         >
           {isExpanded ? (
-            <ChevronLeft className="w-4 h-4 text-golden" />
+            <ChevronLeft className="w-4 h-4 text-primary" style={{ filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.6))' }} />
           ) : (
-            <ChevronRight className="w-4 h-4 text-golden" />
+            <ChevronRight className="w-4 h-4 text-primary" style={{ filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.6))' }} />
           )}
         </div>
       </aside>

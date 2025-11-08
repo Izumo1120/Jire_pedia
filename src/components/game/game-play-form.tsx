@@ -75,105 +75,107 @@ export function GamePlayForm({ term }: GamePlayFormProps) {
   }
 
   return (
-    <div className="container mx-auto max-w-3xl py-8 px-4">
-      <div className="space-y-8">
-        {/* ヘッダー */}
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl font-bold">
-            「<span className="text-yellow-500">{term.word}</span>」を説明しよう
-          </h1>
-          <p className="text-sm text-gray-400">
-            {term.category} {term.subcategory && `/ ${term.subcategory}`}
+    <div className="space-y-6 md:space-y-8">
+      {/* ヘッダー */}
+      <div className="text-center space-y-3 md:space-y-4">
+        <h1 className="heading text-3xl md:text-4xl font-bold">
+          「<span className="text-primary" style={{ textShadow: '0 0 40px rgba(255, 215, 0, 0.5)' }}>{term.word}</span>」を説明しよう
+        </h1>
+        <p className="text-sm md:text-base text-muted-foreground">
+          {term.category} {term.subcategory && `/ ${term.subcategory}`}
+        </p>
+      </div>
+
+      <div className="knowledge-cluster p-6 md:p-8 space-y-6 md:space-y-8 relative z-10">
+        {/* NGワード */}
+        <div>
+          <h3 className="heading text-lg md:text-xl font-bold mb-3 md:mb-4">
+            使ってはいけない言葉（NGワード）
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {term.ngWords.map((word) => (
+              <span
+                key={word}
+                className="px-3 py-1 text-sm font-medium rounded bg-red-950/50 border border-red-700/70 text-red-400"
+                style={{
+                  boxShadow: '0 0 10px rgba(239, 68, 68, 0.2)',
+                  textShadow: '0 0 8px rgba(248, 113, 113, 0.3)'
+                }}
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* 難易度選択 */}
+        <div className="relative z-20">
+          <h3 className="heading text-lg md:text-xl font-bold mb-3 md:mb-4">難易度を選択</h3>
+          <div className="grid grid-cols-3 gap-3">
+            {(["easy", "normal", "hard"] as Difficulty[]).map((diff) => (
+              <button
+                key={diff}
+                type="button"
+                onClick={() => setDifficulty(diff)}
+                className={`
+                  text-center py-4 px-4 rounded border-2 transition-all relative z-20 cursor-pointer
+                  ${difficulty === diff
+                    ? 'border-primary bg-primary/20 shadow-[0_0_15px_rgba(255,215,0,0.3)]'
+                    : 'border-border bg-background/50 hover:bg-background/70 hover:border-primary/30'}
+                `}
+              >
+                <div className="text-base font-bold mb-1">
+                  {difficultyInfo[diff].label}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {difficultyInfo[diff].xp}
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground mt-3 text-center">
+            対戦相手: {difficultyInfo[difficulty].ai}
           </p>
         </div>
 
-        <div className="space-y-6 bg-slate-800 rounded-lg p-6 border border-slate-700">
-          {/* NGワード */}
-          <div>
-            <h3 className="font-semibold mb-4 text-lg">
-              使ってはいけない言葉（NGワード）
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {term.ngWords.map((word) => (
-                <span
-                  key={word}
-                  className="px-3 py-1 bg-red-900/30 border border-red-700 rounded text-sm"
-                >
-                  {word}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* 難易度選択 */}
-          <div>
-            <h3 className="font-semibold mb-4 text-lg">難易度を選択</h3>
-            <div className="grid grid-cols-3 gap-3">
-              {(["easy", "normal", "hard"] as Difficulty[]).map((diff) => (
-                <button
-                  key={diff}
-                  type="button"
-                  onClick={() => setDifficulty(diff)}
-                  className={`
-                    text-center py-4 px-4 rounded border-2 transition-all
-                    ${difficulty === diff 
-                      ? 'border-yellow-500 bg-yellow-500/20' 
-                      : 'border-slate-600 bg-slate-700/50 hover:bg-slate-700'}
-                  `}
-                >
-                  <div className="text-base font-bold mb-1">
-                    {difficultyInfo[diff].label}
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    {difficultyInfo[diff].xp}
-                  </div>
-                </button>
-              ))}
-            </div>
-            <p className="text-sm text-gray-400 mt-3 text-center">
-              対戦相手: {difficultyInfo[difficulty].ai}
-            </p>
-          </div>
-
-          {/* 説明文入力 */}
-          <div>
-            <h3 className="font-semibold mb-4 text-lg"><a href=""></a>あなたの説明</h3>
-            <textarea
-              value={explanation}
-              onChange={(e) => {
-                const newValue = e.target.value
-                setExplanation(newValue)
-                checkNGWords(newValue)
-              }}
-              placeholder="この用語を、NGワードを使わずに説明してください..."
-              rows={8}
-              disabled={isSubmitting}
-              className="w-full p-3 bg-slate-900 border border-slate-600 rounded-lg text-white text-sm resize-vertical focus:outline-none focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-            <p className="text-sm text-gray-400 mt-2">
-              {explanation.length} 文字
-            </p>
-          </div>
-
-          {/* NGワード警告 */}
-          {ngWordsFound.length > 0 && (
-            <div className="p-4 bg-red-900/20 border border-red-700 rounded">
-              <p className="text-sm text-red-400 font-medium">
-                ⚠ NGワードが含まれています: {ngWordsFound.join(", ")}
-              </p>
-            </div>
-          )}
-
-          {/* 送信ボタン */}
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isSubmitting || !explanation.trim() || ngWordsFound.length > 0}
-            className="w-full text-lg py-4 font-bold rounded border-2 border-yellow-500 bg-yellow-500/20 hover:bg-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          >
-            {isSubmitting ? "判定中..." : "AIに挑戦する"}
-          </button>
+        {/* 説明文入力 */}
+        <div className="relative z-20">
+          <h3 className="heading text-lg md:text-xl font-bold mb-3 md:mb-4">あなたの説明</h3>
+          <textarea
+            value={explanation}
+            onChange={(e) => {
+              const newValue = e.target.value
+              setExplanation(newValue)
+              checkNGWords(newValue)
+            }}
+            placeholder="この用語を、NGワードを使わずに説明してください..."
+            rows={8}
+            disabled={isSubmitting}
+            className="thought-workspace w-full min-h-[200px] resize-vertical relative z-20"
+          />
+          <p className="text-sm text-muted-foreground mt-2">
+            {explanation.length} 文字
+          </p>
         </div>
+
+        {/* NGワード警告 */}
+        {ngWordsFound.length > 0 && (
+          <div className="unstable-zone p-4 relative z-20">
+            <p className="text-sm md:text-base font-medium">
+              ⚠ NGワードが含まれています: {ngWordsFound.join(", ")}
+            </p>
+          </div>
+        )}
+
+        {/* 送信ボタン */}
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={isSubmitting || !explanation.trim() || ngWordsFound.length > 0}
+          className="action-node w-full text-lg md:text-xl py-4 font-bold disabled:opacity-50 disabled:cursor-not-allowed relative z-30"
+        >
+          {isSubmitting ? "判定中..." : "AIに挑戦する"}
+        </button>
       </div>
     </div>
   )

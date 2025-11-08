@@ -2,7 +2,6 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { EntryCard } from "@/components/social/entry-card"
 import { auth } from "@/lib/auth"
@@ -89,9 +88,9 @@ export default async function TermDetailPage({
                 {term.subcategory && ` / ${term.subcategory}`}
               </p>
             </div>
-            <Button asChild>
-              <Link href={`/play/${term.id}`}>この用語で遊ぶ</Link>
-            </Button>
+            <Link href={`/play/${term.id}`} className="action-node text-base md:text-lg px-6 py-3 relative z-20">
+              この用語で遊ぶ
+            </Link>
           </div>
 
           <div className="flex gap-2 flex-wrap">
@@ -159,13 +158,13 @@ export default async function TermDetailPage({
         )}
 
         {term.entries.length === 0 && (
-          <Card className="knowledge-cluster p-8 text-center">
+          <Card className="knowledge-cluster p-8 text-center relative z-10">
             <p className="text-lg text-gray-300">
               まだ投稿された説明がありません。最初に説明を投稿する人になりませんか？
             </p>
-            <Button asChild className="action-node mt-4">
-              <Link href={`/play/${term.id}`}>挑戦する</Link>
-            </Button>
+            <Link href={`/play/${term.id}`} className="action-node inline-block mt-4 px-6 py-3 relative z-20">
+              挑戦する
+            </Link>
           </Card>
         )}
       </div>

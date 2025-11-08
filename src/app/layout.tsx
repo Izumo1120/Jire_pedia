@@ -8,6 +8,10 @@ import { NexusCanvas } from "@/components/nexus/nexus-canvas"
 export const metadata: Metadata = {
   title: "Jire-pedia - AIを攻略する説明力ゲーム",
   description: "専門用語を自分の言葉で説明し、AIに推測させる学習プラットフォーム",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
 }
 
 export default function RootLayout({

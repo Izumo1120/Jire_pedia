@@ -34,34 +34,35 @@ export default async function SelectTermPage() {
           </p>
         </div>
 
-        <Card className="knowledge-cluster p-6 md:p-8">
+        <Card className="knowledge-cluster p-6 md:p-8 relative z-10">
           <div className="space-y-4 md:space-y-6">
             <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-2">カテゴリー</p>
-              <p className="text-lg font-semibold">{randomTerm.category}</p>
+              <p className="text-sm md:text-base text-muted-foreground mb-2">カテゴリー</p>
+              <p className="text-lg md:text-xl font-semibold">{randomTerm.category}</p>
               {randomTerm.subcategory && (
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm md:text-base text-muted-foreground mt-1">
                   {randomTerm.subcategory}
                 </p>
               )}
             </div>
 
             <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-2">あなたが説明する用語</p>
-              <p className="text-4xl font-bold text-primary">{randomTerm.word}</p>
+              <p className="text-sm md:text-base text-muted-foreground mb-2">あなたが説明する用語</p>
+              <p className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary" style={{ textShadow: '0 0 40px rgba(255, 215, 0, 0.5)' }}>
+                {randomTerm.word}
+              </p>
             </div>
 
-            <div className="flex justify-center gap-4">
-              <Button asChild size="lg">
-                <Link href={`/play/${randomTerm.id}`}>
-                  説明を始める
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/play/select">
-                  別の用語にする
-                </Link>
-              </Button>
+            <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4 relative z-20">
+              <Link href={`/play/${randomTerm.id}`} className="action-node text-base md:text-lg px-6 py-3 text-center">
+                説明を始める
+              </Link>
+              <Link href="/play/select" className="action-node text-base md:text-lg px-6 py-3 text-center" style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                borderColor: 'rgba(255, 255, 255, 0.2)'
+              }}>
+                別の用語にする
+              </Link>
             </div>
           </div>
         </Card>
