@@ -1,62 +1,71 @@
-import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
-import { judgeWithGemini, judgeWithGroq } from "@/lib/ai"
-import { checkNGWords } from "@/lib/ng-word-checker"
-import { calculateXP, checkLevelUp, getRankFromLevel } from "@/lib/xp"
-import { z } from "zod"
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { judgeWithGemini, judgeWithGroq } from "@/lib/ai";
+import { checkNGWords } from "@/lib/ng-word-checker";
+import { calculateXP, checkLevelUp, getRankFromLevel } from "@/lib/xp";
+import { z } from "zod";
 
 const judgeSchema = z.object({
   termId: z.string(),
   explanation: z.string().min(1),
   difficulty: z.enum(["easy", "normal", "hard"]),
-})
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user) {
-      return NextResponse.json({ message: "認証が必要です" }, { status: 401 })
+      return NextResponse.json({ message: "認証が必要です" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { termId, explanation, difficulty } = judgeSchema.parse(body)
+    const body = await request.json();
+    const { termId, explanation, difficulty } = judgeSchema.parse(body);
 
     // 用語を取得
     const term = await prisma.term.findUnique({
       where: { id: termId },
-    })
+    });
 
     if (!term) {
-      return NextResponse.json({ message: "用語が見つかりません" }, { status: 404 })
+      return NextResponse.json(
+        { message: "用語が見つかりません" },
+        { status: 404 }
+      );
     }
 
     // NGワードチェック
-    const ngCheck = checkNGWords(explanation, term.ngWords)
+    const ngCheck = checkNGWords(explanation, term.ngWords);
     if (ngCheck.hasNGWord) {
       return NextResponse.json(
         { message: "NGワードが含まれています", ngWords: ngCheck.foundWords },
         { status: 400 }
-      )
+      );
     }
 
     // AIで判定
-    let result
-    let aiModel = ""
+    let result;
+    let aiModel = "";
 
     if (difficulty === "easy") {
-      aiModel = "gemini-1.5-flash"
-      result = await judgeWithGemini(explanation, term.word)
+      aiModel = "gemini-2.5-flash";
+      result = await judgeWithGemini(explanation, term.word);
     } else if (difficulty === "normal") {
-      aiModel = "llama-3.1-8b-instant"
-      result = await judgeWithGroq(explanation, term.word, "llama-3.1-8b-instant")
+      aiModel = "llama-3.1-8b-instant";
+      result = await judgeWithGroq(
+        explanation,
+        term.word,
+        "llama-3.1-8b-instant"
+      );
     } else {
-      aiModel = "llama-3-70b-8192"
-      result = await judgeWithGroq(explanation, term.word, "llama-3-70b-8192")
+      aiModel = "llama-3-70b-8192";
+      result = await judgeWithGroq(explanation, term.word, "llama-3-70b-8192");
     }
 
     // XP計算
-    const xpEarned = result.success ? calculateXP(difficulty, result.confidence) : 0
+    const xpEarned = result.success
+      ? calculateXP(difficulty, result.confidence)
+      : 0;
 
     // Attemptを保存
     const attempt = await prisma.attempt.create({
@@ -72,17 +81,17 @@ export async function POST(request: NextRequest) {
         aiComment: result.reasoning,
         xpEarned,
       },
-    })
+    });
 
     // ユーザーのXPとレベルを更新 & Entryを作成
     if (result.success) {
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
-      })
+      });
 
       if (user) {
-        const newXP = user.xp + xpEarned
-        const levelUpCheck = checkLevelUp(newXP, user.level)
+        const newXP = user.xp + xpEarned;
+        const levelUpCheck = checkLevelUp(newXP, user.level);
 
         await prisma.user.update({
           where: { id: session.user.id },
@@ -138,6 +147,7 @@ export async function POST(request: NextRequest) {
           })
           console.log("✨ 新規Entry作成成功:", newEntry.id)
         }
+        });
       }
     }
 
@@ -148,7 +158,7 @@ export async function POST(request: NextRequest) {
         totalAttempts: { increment: 1 },
         totalSuccess: result.success ? { increment: 1 } : undefined,
       },
-    })
+    });
 
     return NextResponse.json({
       attemptId: attempt.id,
@@ -156,12 +166,15 @@ export async function POST(request: NextRequest) {
       aiGuess: result.aiGuess,
       confidence: result.confidence,
       xpEarned,
-    })
+    });
   } catch (error) {
-    console.error("Judge error:", error)
+    console.error("Judge error:", error);
     return NextResponse.json(
-      { message: "判定に失敗しました", error: error instanceof Error ? error.message : "Unknown error" },
+      {
+        message: "判定に失敗しました",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
-    )
+    );
   }
 }
