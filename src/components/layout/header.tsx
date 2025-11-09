@@ -43,6 +43,13 @@ export async function Header() {
                 プレイ
               </Link>
               <Link
+                href="/battle"
+                className="flex items-center text-sm md:text-base font-medium transition-all duration-300 hover:text-primary hover:scale-105"
+                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}
+              >
+                バトル
+              </Link>
+              <Link
                 href="/collaboration"
                 className="flex items-center text-sm md:text-base font-medium transition-all duration-300 hover:text-primary hover:scale-105"
                 style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}

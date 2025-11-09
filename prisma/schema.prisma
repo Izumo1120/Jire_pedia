@@ -34,6 +34,8 @@ model User {
   hostedRooms               CollaborationRoom[]         @relation("HostedRooms")
   collaborationParticipants CollaborationParticipant[]
   collaborationMessages     CollaborationMessage[]
+  battleParticipants        BattleParticipant[]
+  battleAttempts            BattleAttempt[]
 
   @@index([email])
   @@index([xp])
@@ -97,6 +99,7 @@ model Term {
   favorites          Favorite[]
   dailyChallenges    DailyChallenge[]
   collaborationRooms CollaborationRoom[]
+  battleRooms        BattleRoom[]
 
   @@index([category])
   @@index([totalAttempts])
@@ -332,6 +335,68 @@ model CollaborationMessage {
 
   room CollaborationRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   user User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([roomId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Battle Mode
+model BattleRoom {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  termId      String
+  maxPlayers  Int      @default(2)
+  status      String   @default("waiting") // waiting, in_progress, completed
+  difficulty  String   @default("normal")
+  timeLimit   Int      @default(300) // 秒単位（デフォルト5分）
+  createdAt   DateTime @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  term         Term                @relation(fields: [termId], references: [id], onDelete: Cascade)
+  participants BattleParticipant[]
+  attempts     BattleAttempt[]
+
+  @@index([code])
+  @@index([termId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model BattleParticipant {
+  id        String   @id @default(cuid())
+  roomId    String
+  userId    String
+  joinedAt  DateTime @default(now())
+  leftAt    DateTime?
+  isActive  Boolean  @default(true)
+  isReady   Boolean  @default(false)
+
+  room BattleRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@index([roomId])
+  @@index([userId])
+  @@index([isActive])
+}
+
+model BattleAttempt {
+  id          String   @id @default(cuid())
+  roomId      String
+  userId      String
+  explanation String   @db.Text
+  success     Boolean
+  confidence  Float
+  aiResponse  String   @db.Text
+  aiComment   String?  @db.Text
+  xpEarned    Int      @default(0)
+  submitTime  Int // 提出までの秒数
+  createdAt   DateTime @default(now())
+
+  room BattleRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([roomId])
   @@index([userId])
