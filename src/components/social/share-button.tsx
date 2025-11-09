@@ -1,7 +1,7 @@
 "use client"
 
 import { Share2, Facebook, MessageCircle, Link2, Check } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +17,8 @@ interface ShareButtonProps {
 
 export function ShareButton({ url, title, text }: ShareButtonProps) {
   const [copied, setCopied] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [hasNativeShare, setHasNativeShare] = useState(false)
 
   const fullUrl = typeof window !== "undefined" ? `${window.location.origin}${url}` : url
 
@@ -67,10 +69,49 @@ export function ShareButton({ url, title, text }: ShareButtonProps) {
     window.open(lineUrl, "_blank", "noopener,noreferrer")
   }
 
-  // ネイティブシェアが使える場合はそれを優先
-  const hasNativeShare =
-    typeof navigator !== "undefined" && navigator.share !== undefined
+  useEffect(() => {
+    setMounted(true)
+    setHasNativeShare(
+      typeof navigator !== "undefined" && navigator.share !== undefined
+    )
+  }, [])
 
+  // マウント前は常にドロップダウンメニューをレンダリング（Hydration対策）
+  if (!mounted) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            className="flex items-center gap-2 text-gray-400 hover:text-golden transition-colors"
+            aria-label="シェア"
+          >
+            <Share2 size={20} />
+            <span className="text-sm font-medium">シェア</span>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="bg-deep-blue border border-golden/30">
+          <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer flex items-center gap-2">
+            <span className="text-lg font-bold">𝕏</span>
+            X (Twitter) でシェア
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer flex items-center gap-2">
+            <Facebook size={16} />
+            Facebook でシェア
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={shareToLine} className="cursor-pointer flex items-center gap-2">
+            <MessageCircle size={16} />
+            LINE でシェア
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer flex items-center gap-2">
+            {copied ? <Check size={16} className="text-success" /> : <Link2 size={16} />}
+            {copied ? "コピーしました！" : "リンクをコピー"}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+
+  // マウント後、ネイティブシェアが使える場合はシンプルなボタンに切り替え
   if (hasNativeShare) {
     return (
       <button
