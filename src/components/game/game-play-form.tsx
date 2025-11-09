@@ -9,9 +9,10 @@ type Difficulty = "easy" | "normal" | "hard"
 interface GamePlayFormProps {
   term: Term
   userId: string
+  dailyChallengeId?: string
 }
 
-export function GamePlayForm({ term }: GamePlayFormProps) {
+export function GamePlayForm({ term, dailyChallengeId }: GamePlayFormProps) {
   const router = useRouter()
   const [explanation, setExplanation] = useState("")
   const [difficulty, setDifficulty] = useState<Difficulty>("normal")
@@ -53,6 +54,7 @@ export function GamePlayForm({ term }: GamePlayFormProps) {
           termId: term.id,
           explanation,
           difficulty,
+          dailyChallengeId,
         }),
       })
 

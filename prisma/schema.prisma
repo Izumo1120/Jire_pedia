@@ -21,14 +21,15 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  attempts      Attempt[]
-  entries       Entry[]
-  favorites     Favorite[]
-  likes         Like[]
-  comments      Comment[]
-  notifications Notification[]
+  accounts               Account[]
+  sessions               Session[]
+  attempts               Attempt[]
+  entries                Entry[]
+  favorites              Favorite[]
+  likes                  Like[]
+  comments               Comment[]
+  notifications          Notification[]
+  dailyChallengeAttempts DailyChallengeAttempt[]
 
   @@index([email])
 }
@@ -85,9 +86,10 @@ model Term {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  attempts  Attempt[]
-  entries   Entry[]
-  favorites Favorite[]
+  attempts        Attempt[]
+  entries         Entry[]
+  favorites       Favorite[]
+  dailyChallenges DailyChallenge[]
 
   @@index([category])
   @@index([totalAttempts])
@@ -108,8 +110,9 @@ model Attempt {
   xpEarned    Int      @default(0)
   createdAt   DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  term Term @relation(fields: [termId], references: [id], onDelete: Cascade)
+  user                   User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  term                   Term                   @relation(fields: [termId], references: [id], onDelete: Cascade)
+  dailyChallengeAttempts DailyChallengeAttempt?
 
   @@index([userId])
   @@index([termId])
@@ -204,4 +207,34 @@ model Notification {
   @@index([userId])
   @@index([read])
   @@index([createdAt])
+}
+
+// Daily Challenge
+model DailyChallenge {
+  id        String   @id @default(cuid())
+  date      DateTime @unique @db.Date
+  termId    String
+  createdAt DateTime @default(now())
+
+  term                   Term                    @relation(fields: [termId], references: [id], onDelete: Cascade)
+  dailyChallengeAttempts DailyChallengeAttempt[]
+
+  @@index([date])
+}
+
+model DailyChallengeAttempt {
+  id               String   @id @default(cuid())
+  userId           String
+  dailyChallengeId String
+  attemptId        String   @unique
+  completedAt      DateTime @default(now())
+
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyChallenge DailyChallenge @relation(fields: [dailyChallengeId], references: [id], onDelete: Cascade)
+  attempt        Attempt        @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dailyChallengeId])
+  @@index([dailyChallengeId])
+  @@index([userId])
+  @@index([completedAt])
 }

@@ -5,8 +5,10 @@ import { GamePlayForm } from "@/components/game/game-play-form"
 
 export default async function GamePlayPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ termId: string }>
+  searchParams: Promise<{ daily?: string; challengeId?: string }>
 }) {
   const session = await auth()
 
@@ -15,6 +17,7 @@ export default async function GamePlayPage({
   }
 
   const { termId } = await params
+  const { challengeId } = await searchParams
 
   const term = await prisma.term.findUnique({
     where: { id: termId },
@@ -27,7 +30,11 @@ export default async function GamePlayPage({
   return (
     <div className="nexus-container nexus-section">
       <div className="mx-auto max-w-3xl">
-        <GamePlayForm term={term} userId={session.user.id} />
+        <GamePlayForm
+          term={term}
+          userId={session.user.id}
+          dailyChallengeId={challengeId}
+        />
       </div>
     </div>
   )
