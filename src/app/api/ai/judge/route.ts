@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { judgeWithGemini, judgeWithGroq } from "@/lib/ai";
 import { checkNGWords } from "@/lib/ng-word-checker";
 import { calculateXP, checkLevelUp, getRankFromLevel } from "@/lib/xp";
+import { checkAndAwardBadges } from "@/lib/badges";
 import { z } from "zod";
 
 const judgeSchema = z.object({
@@ -159,12 +160,23 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // バッジの獲得チェック
+    let newBadges: string[] = []
+    if (result.success) {
+      try {
+        newBadges = (await checkAndAwardBadges(session.user.id)) || []
+      } catch (error) {
+        console.error("Error checking badges:", error)
+      }
+    }
+
     return NextResponse.json({
       attemptId: attempt.id,
       success: result.success,
       aiGuess: result.aiGuess,
       confidence: result.confidence,
       xpEarned,
+      newBadges,
     });
   } catch (error) {
     console.error("Judge error:", error);

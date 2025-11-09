@@ -29,11 +29,25 @@ export async function Header() {
           {session && (
             <nav className="flex gap-4 md:gap-6">
               <Link
+                href="/daily-challenge"
+                className="flex items-center text-sm md:text-base font-medium transition-all duration-300 hover:text-primary hover:scale-105"
+                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}
+              >
+                デイリー
+              </Link>
+              <Link
                 href="/play/select"
                 className="flex items-center text-sm md:text-base font-medium transition-all duration-300 hover:text-primary hover:scale-105"
                 style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}
               >
                 プレイ
+              </Link>
+              <Link
+                href="/leaderboard"
+                className="flex items-center text-sm md:text-base font-medium transition-all duration-300 hover:text-primary hover:scale-105"
+                style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}
+              >
+                ランキング
               </Link>
               <Link
                 href="/dictionary"
