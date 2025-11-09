@@ -21,16 +21,19 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts               Account[]
-  sessions               Session[]
-  attempts               Attempt[]
-  entries                Entry[]
-  favorites              Favorite[]
-  likes                  Like[]
-  comments               Comment[]
-  notifications          Notification[]
-  dailyChallengeAttempts DailyChallengeAttempt[]
-  userBadges             UserBadge[]
+  accounts                  Account[]
+  sessions                  Session[]
+  attempts                  Attempt[]
+  entries                   Entry[]
+  favorites                 Favorite[]
+  likes                     Like[]
+  comments                  Comment[]
+  notifications             Notification[]
+  dailyChallengeAttempts    DailyChallengeAttempt[]
+  userBadges                UserBadge[]
+  hostedRooms               CollaborationRoom[]         @relation("HostedRooms")
+  collaborationParticipants CollaborationParticipant[]
+  collaborationMessages     CollaborationMessage[]
 
   @@index([email])
   @@index([xp])
@@ -89,10 +92,11 @@ model Term {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  attempts        Attempt[]
-  entries         Entry[]
-  favorites       Favorite[]
-  dailyChallenges DailyChallenge[]
+  attempts           Attempt[]
+  entries            Entry[]
+  favorites          Favorite[]
+  dailyChallenges    DailyChallenge[]
+  collaborationRooms CollaborationRoom[]
 
   @@index([category])
   @@index([totalAttempts])
@@ -273,4 +277,63 @@ model UserBadge {
   @@index([userId])
   @@index([badgeId])
   @@index([earnedAt])
+}
+
+// Collaboration Mode
+model CollaborationRoom {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  termId      String
+  hostId      String
+  maxPlayers  Int      @default(4)
+  status      String   @default("waiting") // waiting, in_progress, completed
+  difficulty  String   @default("normal")
+  createdAt   DateTime @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  host         User                      @relation("HostedRooms", fields: [hostId], references: [id], onDelete: Cascade)
+  term         Term                      @relation(fields: [termId], references: [id], onDelete: Cascade)
+  participants CollaborationParticipant[]
+  messages     CollaborationMessage[]
+
+  @@index([code])
+  @@index([hostId])
+  @@index([termId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model CollaborationParticipant {
+  id        String   @id @default(cuid())
+  roomId    String
+  userId    String
+  role      String   @default("participant") // host, participant
+  joinedAt  DateTime @default(now())
+  leftAt    DateTime?
+  isActive  Boolean  @default(true)
+
+  room CollaborationRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@index([roomId])
+  @@index([userId])
+  @@index([isActive])
+}
+
+model CollaborationMessage {
+  id        String   @id @default(cuid())
+  roomId    String
+  userId    String
+  content   String   @db.Text
+  type      String   @default("text") // text, hint, system
+  createdAt DateTime @default(now())
+
+  room CollaborationRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([roomId])
+  @@index([userId])
+  @@index([createdAt])
 }
