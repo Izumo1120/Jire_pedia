@@ -128,6 +128,8 @@ h3 {
   mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.4s;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .knowledge-cluster:hover::before {
